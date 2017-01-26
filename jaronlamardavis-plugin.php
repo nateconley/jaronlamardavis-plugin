@@ -34,6 +34,17 @@ class Jldavis_Plugin {
 
 		// Add media page metaboxes
 		add_action( 'cmb2_admin_init', array( $this, 'media_metaboxes' ) );
+
+		// Add shows post type
+		add_action( 'init', array( $this, 'shows_post_type' ) );
+
+		// Shows metaboxes
+		add_action( 'cmb2_admin_init', array( $this, 'shows_metaboxes' ) );
+
+		// Custom columns for show post type in admin
+		add_filter( 'manage_shows_posts_columns', array( $this, 'shows_columns' ) );
+		add_action( 'manage_shows_posts_custom_column', array( $this, 'shows_custom_columns' ), 10, 2 );
+		add_filter( 'manage_edit-shows_sortable_columns', array( $this, 'shows_sortable_columns' ) );
 	}
 
 	/**
@@ -156,7 +167,7 @@ class Jldavis_Plugin {
 		) );
 
 		$cmb->add_group_field( $group_field_id, array(
-		    'name'    => 'Image (Picture, Article, Music)',
+		    'name'    => 'Image (All)',
 		    'desc'    => 'Upload an image.',
 		    'id'      => 'image',
 		    'type'    => 'file',
@@ -178,6 +189,126 @@ class Jldavis_Plugin {
 		    'id'   => 'url',
 		    'type' => 'text_url',
 		) );
+	}
+
+	public function shows_post_type() {
+		register_post_type( 'shows',
+			array(
+				'labels' => array(
+					'name' 					=> 'Shows',
+					'singular_name' 		=> 'Show',
+					'add_new' 				=> 'Add New',
+					'add_new_item' 			=> 'Add New Show',
+					'edit_item' 			=> 'Edit Show',
+					'new_item' 				=> 'New Show',
+					'view_item' 			=> 'View Show',
+					'search_items' 			=> 'Search Shows',
+					'not_found' 			=> 'No Shows Found',
+					'not_found_in_trash' 	=> 'No Shows Found in Trash',
+				),
+				'public' 	=> true,
+				'query_var' => true,
+				'rewrite' 	=> false,
+				'menu_icon' => 'dashicons-calendar-alt',
+			)
+		);
+	}
+
+	public function shows_metaboxes() {
+		// Remove the post editor
+		remove_post_type_support( 'shows', 'editor' );
+		remove_post_type_support( 'shows', 'title' );
+
+		$prefix = 'jldavis-show-';
+
+		$cmb_shows = new_cmb2_box( array(
+			'id' 			=> 'shows_metabox',
+			'title' 		=> 'Show Information',
+			'object_types' 	=> array( 'shows' ),
+		) );
+
+		$cmb_shows->add_field( array(
+			'name' => 'Show Date',
+			'id' => $prefix . 'date',
+			'type' => 'text_date_timestamp',
+		) );
+
+		$cmb_shows->add_field( array(
+			'name' => 'Venue',
+			'id' => $prefix . 'venue',
+			'type' => 'text',
+		) );
+
+		$cmb_shows->add_field( array(
+			'name' => 'City',
+			'id' => $prefix . 'city',
+			'type' => 'text',
+		) );
+
+		$cmb_shows->add_field( array(
+			'name' => 'Time',
+			'id' => $prefix . 'time',
+			'type' => 'text',
+		) );
+
+		$cmb_shows->add_field( array(
+			'name' => 'details',
+			'id' => $prefix . 'details',
+			'type' => 'wysiwyg',
+		) );
+	}
+
+	/**
+	 * Shows post type screen columns
+	 */
+	public function shows_columns( $columns ) {
+		unset(
+			$columns[ 'title' ],
+			$columns[ 'date' ]
+		);
+
+		$new_columns = array(
+			'show-venue' 	=> 'Venue',
+			'show-date' 	=> 'Show Date'
+		);
+
+		return array_merge( $columns, $new_columns );
+	}
+
+	/**
+	 * Shows Post Type custom columns
+	 */
+	public function shows_custom_columns( $column, $post_id ) {
+		global $post;
+
+		switch( $column ) {
+
+			case 'show-venue' :
+				// Get the post meta
+				$venue = get_post_meta( $post_id, 'jldavis-show-venue', true );
+				if ( empty( $venue ) ) {
+					echo 'Unknown';
+				} else {
+					echo $venue;
+				}
+				break;
+			case 'show-date' :
+				// Get the post meta
+				$show_date = get_post_meta( $post_id, 'jldavis-show-date', true );
+				if ( empty( $show_date ) ) {
+					echo 'Unknown';
+				} else {
+					echo date( "n.d.Y", $show_date );
+				}
+				break;
+			default :
+				break;
+		}
+	}
+
+	public function shows_sortable_columns( $columns ) {
+		$columns[ 'show-date' ] = 'show-date';
+		return $columns;
 	}
 }
 
