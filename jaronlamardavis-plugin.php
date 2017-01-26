@@ -208,7 +208,7 @@ class Jldavis_Plugin {
 				),
 				'public' 	=> true,
 				'query_var' => true,
-				'rewrite' 	=> false,
+				'rewrite' 	=> true,
 				'menu_icon' => 'dashicons-calendar-alt',
 			)
 		);
