@@ -56,10 +56,10 @@ class Jldavis_Plugin {
 
 		// Initiate new metabox
 		$cmb = new_cmb2_box( array(
-			'id' 		=> 'front_page_images',
-			'title' 	=> 'Home page images',
-			'object_types' => array( 'page' ),
-			'show_on' 	=> array( 
+			'id' 			=> 'front_page_images',
+			'title' 		=> 'Home page images',
+			'object_types' 	=> array( 'page' ),
+			'show_on' 		=> array( 
 								'key' => 'id',
 								'value' => 5
 							),
@@ -97,10 +97,10 @@ class Jldavis_Plugin {
 
 		// Initiate new metabox
 		$cmb2 = new_cmb2_box( array(
-			'id' 		=> 'front_page_bio',
-			'title' 	=> 'Home page bio excerpt',
-			'object_types' => array( 'page' ),
-			'show_on' 	=> array( 
+			'id' 			=> 'front_page_bio',
+			'title' 		=> 'Home page bio excerpt',
+			'object_types' 	=> array( 'page' ),
+			'show_on' 		=> array( 
 								'key' => 'id',
 								'value' => 5
 							),
@@ -204,7 +204,7 @@ class Jldavis_Plugin {
 					'view_item' 			=> 'View Show',
 					'search_items' 			=> 'Search Shows',
 					'not_found' 			=> 'No Shows Found',
-					'not_found_in_trash' 	=> 'No Shows Found in Trash',
+					'not_found_in_trash'	=> 'No Shows Found in Trash',
 				),
 				'public' 	=> true,
 				'query_var' => true,
@@ -217,7 +217,7 @@ class Jldavis_Plugin {
 	public function shows_metaboxes() {
 		// Remove the post editor
 		remove_post_type_support( 'shows', 'editor' );
-		remove_post_type_support( 'shows', 'title' );
+		// remove_post_type_support( 'shows', 'title' );
 
 		$prefix = 'jldavis-show-';
 
@@ -228,33 +228,33 @@ class Jldavis_Plugin {
 		) );
 
 		$cmb_shows->add_field( array(
-			'name' => 'Show Date',
-			'id' => $prefix . 'date',
-			'type' => 'text_date_timestamp',
+			'name' 	=> 'Show Date',
+			'id' 	=> $prefix . 'date',
+			'type' 	=> 'text_date_timestamp',
 		) );
 
 		$cmb_shows->add_field( array(
-			'name' => 'Venue',
-			'id' => $prefix . 'venue',
-			'type' => 'text',
+			'name' 	=> 'Venue',
+			'id' 	=> $prefix . 'venue',
+			'type' 	=> 'text',
 		) );
 
 		$cmb_shows->add_field( array(
-			'name' => 'City',
-			'id' => $prefix . 'city',
-			'type' => 'text',
+			'name' 	=> 'City',
+			'id' 	=> $prefix . 'city',
+			'type' 	=> 'text',
 		) );
 
 		$cmb_shows->add_field( array(
-			'name' => 'Time',
-			'id' => $prefix . 'time',
-			'type' => 'text',
+			'name' 	=> 'Time',
+			'id' 	=> $prefix . 'time',
+			'type' 	=> 'text',
 		) );
 
 		$cmb_shows->add_field( array(
-			'name' => 'details',
-			'id' => $prefix . 'details',
-			'type' => 'wysiwyg',
+			'name'	=> 'details',
+			'id' 	=> $prefix . 'details',
+			'type' 	=> 'wysiwyg',
 		) );
 	}
 
